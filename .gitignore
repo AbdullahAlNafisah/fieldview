@@ -39,3 +39,7 @@
 
 # debug information files
 *.dwo
+
+.venv
+.vscode
+__pycache__/
