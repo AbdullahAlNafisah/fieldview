@@ -31,5 +31,5 @@ Host commands (ASCII, newline-terminated). Single-letter or full words are accep
 ## Python GUI — Run
 
 ```bash
-python python/mag3110_gui.py
+python mag3110_gui.py
 ```
