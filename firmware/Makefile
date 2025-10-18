@@ -1,47 +1,60 @@
-MCU=atmega2560
-F_CPU=16000000UL
-
-# Auto-detect first likely serial port
+# ===== Serial/Programmer settings =====
+# Try to auto-detect a likely serial port (first match of these globs).
+# Users can override by running: make PORT=/dev/ttyACM0
 PORT ?= $(firstword $(wildcard /dev/ttyACM* /dev/ttyUSB*))
-BAUD ?= 115200
-BAUD_SERIAL ?= 115200
-PROGRAMMER ?= wiring
 
-CXX=avr-g++
-OBJCOPY=avr-objcopy
-CXXFLAGS=-mmcu=$(MCU) -DF_CPU=$(F_CPU) -Os -std=gnu++17 -Wall -Wextra -ffunction-sections -fdata-sections -Iinclude
-# CXXFLAGS= -mmcu=$(MCU) -DF_CPU=$(F_CPU) -O2 -std=gnu++17 -Wall -Wextra -ffunction-sections -fdata-sections -Iinclude
-LDFLAGS=-Wl,--gc-sections
+# ===== User settings =====
+BAUD ?= 115200                  # Arduino Mega2560 bootloader baud
+PROGRAMMER ?= wiring            # Bootloader protocol for Mega2560
 
-SRC := $(wildcard src/*.cpp)
-OBJ := $(SRC:.cpp=.o)
+# ===== Toolchain =====
+MCU     := atmega2560
+F_CPU   := 16000000UL
+CXX     := avr-g++
+CC      := avr-gcc
+OBJCOPY := avr-objcopy
+AVRDUDE := avrdude
 
-all: main.hex
+# ===== Flags =====
+CXXFLAGS := -std=gnu++17 -Os -DF_CPU=$(F_CPU) -mmcu=$(MCU) -Wall -Wextra \
+            -fno-exceptions -fno-rtti
+CFLAGS  := -std=gnu11   -Os -DF_CPU=$(F_CPU) -mmcu=$(MCU) -Wall -Wextra
+LDFLAGS := -mmcu=$(MCU)
 
-main.elf: $(OBJ)
-	$(CXX) $(CXXFLAGS) $^ -o $@ $(LDFLAGS)
+# ===== Sources / outputs =====
+SRC_DIR    := src
+BUILD_DIR  := build
+TARGET     := $(BUILD_DIR)/mag3110_quad
+SOURCES    := $(SRC_DIR)/mag3110_quad.cpp
+OBJECTS    := $(patsubst $(SRC_DIR)/%.cpp,$(BUILD_DIR)/%.o,$(SOURCES))
 
-main.hex: main.elf
+# ===== Default target =====
+all: $(TARGET).hex
+
+# ===== Build rules =====
+$(BUILD_DIR):
+	@mkdir -p $(BUILD_DIR)
+
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.cpp | $(BUILD_DIR)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(TARGET).elf: $(OBJECTS)
+	$(CXX) $(LDFLAGS) $^ -o $@
+
+$(TARGET).hex: $(TARGET).elf
 	$(OBJCOPY) -O ihex -R .eeprom $< $@
 
-flash: main.hex
-	@if [ -z "$(PORT)" ]; then \
-	  echo "No serial port found. Plug the board and/or set PORT=/dev/ttyACM0"; exit 2; \
-	fi
-	@echo "Flashing on $(PORT) with -c $(PROGRAMMER) @ $(BAUD) ..."
-	avrdude -v -p m2560 -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -D -U flash:w:main.hex:i
+# ===== Flash to the board =====
+flash: $(TARGET).hex
+	# Make sure the port exists and is accessible; you may need: sudo usermod -a -G dialout $$USER
+	stty -F $(PORT) hupcl
+	$(AVRDUDE) -v -p $(MCU) -c $(PROGRAMMER) -P $(PORT) -b $(BAUD) -D -U flash:w:$<:i
 
-# Open serial monitor
-screen:
-	@if [ -z "$(PORT)" ]; then \
-	  echo "No serial port found. Plug the board and/or set PORT=/dev/ttyACM0"; exit 2; \
-	fi
-	@echo "Opening serial monitor on $(PORT) @ $(BAUD_SERIAL) ..."
-	screen $(PORT) $(BAUD_SERIAL)
-
-# List ports for convenience
-ports:
-	@echo "Available serial ports:"; ls -l /dev/ttyACM* /dev/ttyUSB* 2>/dev/null || true
+# ===== Utilities =====
+size: $(TARGET).elf
+	avr-size --mcu=$(MCU) --format=avr $<
 
 clean:
-	rm -f $(OBJ) main.elf main.hex
+	@rm -rf $(BUILD_DIR)
+
+.PHONY: all flash clean size
