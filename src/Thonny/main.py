@@ -13,7 +13,8 @@ import time
 # =========================
 # Wi‑Fi setup (STA mode)
 # =========================
-WIFI_SSID = "Galaxy S24 Ultra E577"
+#WIFI_SSID = "Galaxy S24 Ultra E577"
+WIFI_SSID = "Nafisah_wifi"
 WIFI_PASS = "s123123s"
 
 # If you prefer AP mode (board creates its own Wi‑Fi), set USE_AP = True
@@ -566,3 +567,4 @@ try:
     asyncio.run(main())
 finally:
     asyncio.new_event_loop()
+
