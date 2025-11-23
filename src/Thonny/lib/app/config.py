@@ -1,14 +1,18 @@
-# Central place for all tunables.
+# config.py
+MODE = "serial" # "wifi" or "serial"
 
 # Device/hostname (used for pretty URLs)
-HOSTNAME = "Qubical"
+HOSTNAME = "QubiCal"
 
-# Wi‑Fi (used by /boot.py)
+USE_AP = False
+USE_WIFI = (MODE == "wifi")
+
 WIFI_STA = {
-    "ssid": "Nafisah_wifi",
+#    "ssid": "Nafisah_wifi",
+    "ssid": "Galaxy S24 Ultra E577",
     "password": "s123123s",
 }
-USE_AP = False
+
 AP_CFG = {"essid": "ESP32S2-Plotter", "password": "12345678"}
 
 # BMM350 + I2C
