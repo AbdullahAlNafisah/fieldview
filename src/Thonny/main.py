@@ -3,6 +3,7 @@ import sys, machine
 import uasyncio as asyncio
 from app import config as C
 from app.server import serve_forever  # Wi-Fi mode
+from app.serial_mode import run_serial    # serial mode
 # from app.serial_mode import run_serial   # your serial mode later
 import network, time
 
@@ -40,13 +41,10 @@ def setup_wifi():
 def app_main():
     if C.USE_WIFI:
         setup_wifi()
-        # maybe setup_mdns(HOSTNAME) here too
         asyncio.run(serve_forever())
         asyncio.new_event_loop()
     else:
-        # pure serial mode
-        # run_serial()
-        print("Serial mode placeholder")
+        run_serial()
 
 
 

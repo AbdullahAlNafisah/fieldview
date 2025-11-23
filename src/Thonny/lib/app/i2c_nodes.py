@@ -3,9 +3,9 @@ from app import config as C
 from app.bmm350 import BMM350Node, _bus_unstick
 
 
-def make_nodes():
+def make_i2c_nodes():
     """
-    Build nodes using the SAME ordering as your original app: (SCL, SDA).
+    Build nodes using: (SCL, SDA).
     Each tuple in C.SENSORS_PINS is (SCL, SDA). We then create the I2C bus with
     SoftI2C(sda=..., scl=...) and pass (sda, scl) to BMM350Node.
     """

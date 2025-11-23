@@ -2,7 +2,7 @@
 import uasyncio as asyncio
 import json, time
 from app import config as C
-from app.nodes import make_nodes
+from app.i2c_nodes import make_i2c_nodes
 
 INDEX_HTML = r"""
 HTTP/1.1 200 OK
@@ -42,7 +42,7 @@ async def handle_http(reader, writer):
             await writer.awrite("Cache-Control: no-store\r\n")
             await writer.awrite("Connection: keep-alive\r\n\r\n")
 
-            nodes = make_nodes()
+            nodes = make_i2c_nodes()
             last = [(0.0,0.0,0.0,25.0) for _ in range(len(nodes))]
             period_ms = max(1, int(1000 / C.HZ))
 

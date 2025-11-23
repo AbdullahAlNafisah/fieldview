@@ -9,8 +9,8 @@ USE_WIFI = (MODE == "wifi")
 
 WIFI_STA = {
 #    "ssid": "Nafisah_wifi",
-    "ssid": "Galaxy S24 Ultra E577",
-    "password": "s123123s",
+    "ssid": "Galaxy  Ultra E577",
+    "password": "",
 }
 
 AP_CFG = {"essid": "ESP32S2-Plotter", "password": "12345678"}
