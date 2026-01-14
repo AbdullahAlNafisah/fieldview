@@ -1,8 +1,8 @@
 # app/serial_mode.py
 import uasyncio as asyncio
 import json, time
-from app import config as C
-from app.i2c_nodes import make_i2c_nodes
+import config as C
+from i2c_nodes import make_i2c_nodes
 
 async def _serial_loop():
     nodes = make_i2c_nodes()

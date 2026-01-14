@@ -1,9 +1,9 @@
 # main.py
 import sys, machine
 import uasyncio as asyncio
-from app import config as C
-from app.server import serve_forever  # Wi-Fi mode
-from app.serial_mode import run_serial    # serial mode
+import config as C
+from server import serve_forever  # Wi-Fi mode
+from serial_mode import run_serial    # serial mode
 # from app.serial_mode import run_serial   # your serial mode later
 import network, time
 
@@ -45,19 +45,5 @@ def app_main():
         asyncio.new_event_loop()
     else:
         run_serial()
-
-
-
-print("> main.py start")
-
-try:
-    app_main()
-except Exception as e:
-    print("Fatal error in main:")
-    sys.print_exception(e)
-#finally: # This can cause infinite loop if not handled properly
-#    machine.reset()
-    
-print("> main.py end")
 
 

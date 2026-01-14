@@ -1,8 +1,8 @@
 
 import uasyncio as asyncio
 import json, time
-from app import config as C
-from app.i2c_nodes import make_i2c_nodes
+import config as C
+from i2c_nodes import make_i2c_nodes
 
 INDEX_HTML = r"""
 HTTP/1.1 200 OK

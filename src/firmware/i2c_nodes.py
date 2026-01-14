@@ -1,6 +1,6 @@
 from machine import Pin, SoftI2C
-from app import config as C
-from app.bmm350 import BMM350Node, _bus_unstick
+import config as C
+from bmm350 import BMM350Node, _bus_unstick
 
 
 def make_i2c_nodes():

@@ -8,9 +8,9 @@ USE_AP = False
 USE_WIFI = (MODE == "wifi")
 
 WIFI_STA = {
-#    "ssid": "Nafisah_wifi",
-    "ssid": "Galaxy  Ultra E577",
-    "password": "",
+    "ssid": "stc_wifi_5E60",
+    "password": "5G646G3X6A",
+    
 }
 
 AP_CFG = {"essid": "ESP32S2-Plotter", "password": "12345678"}

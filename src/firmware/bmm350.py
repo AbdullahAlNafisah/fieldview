@@ -1,6 +1,6 @@
 from machine import Pin, SoftI2C
 import time
-from app import config as C
+import config as C
 
 # --- Registers / constants ---
 REG_CHIP_ID = 0x00
