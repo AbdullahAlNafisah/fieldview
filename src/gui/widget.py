@@ -17,7 +17,7 @@ from serial_worker import SerialWorker
 
 # ---------------------------- Configuration ---------------------------------
 # e.g. "COM5" on Windows, "/dev/ttyACM0" on Linux
-SERIAL_PORT = "COM5"
+SERIAL_PORT = "COM17"
 BAUD_RATE = 115200
 NUM_SENSORS = 6
 
